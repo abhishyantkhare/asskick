@@ -58,7 +58,8 @@ def aksearch():
     tmp_url = 'http://kickass.to/usearch/'
 
     query = input('Type query: ')
-    url = tmp_url + query + '/'
+    url = tmp_url + query + ' category:music'
+    print(url)
 
     try:
         cont = requests.get(url)
@@ -89,21 +90,22 @@ def aksearch():
         leechers = al[4::5]
 
         # for table printing
-        table = [[OutColors.BW + str(i+1) + OutColors.DEFAULT if (i+1) % 2 == 0 else i+1,
-                    OutColors.BW + title[i] + OutColors.DEFAULT if (i+1) % 2 == 0 else title[i],
-                    OutColors.BW + size[i] + OutColors.DEFAULT if (i+1) % 2 == 0 else size[i],
-                    OutColors.BW + age[i] + OutColors.DEFAULT if (i+1) % 2 == 0 else age[i],
-                    OutColors.SEEDER + seeders[i] + OutColors.DEFAULT if (i+1) % 2 == 0 else OutColors.LG + seeders[i] + OutColors.DEFAULT,
-                    OutColors.LEECHER + leechers[i] + OutColors.DEFAULT if (i+1) % 2 == 0 else OutColors.LR + leechers[i] + OutColors.DEFAULT] for i in range(len(href))]
+        hSeed = 0;
+        selection = 1;
+        for i in range(len(href)):
+            if(int(seeders[i])>hSeed):
+                hSeed=int(seeders[i])
+                selection = i;
+            
         print()
-        print(tabulate.tabulate(table, headers=['No', 'Title', 'Size', 'Age', 'Seeders', 'Leechers']))
+        print(hSeed)
 
         # torrent selection
         if len(href) == 1:
             torrent = 1
         else:
             print('\nSelect torrent: [ 1 - ' + str(len(href)) + ' ] or [ M ] to go back to main menu or [ Q ] to quit')
-            torrent = select_torrent()
+            torrent = selection;
             if torrent == 'Q' or torrent == 'q':
                 sys.exit(0)
             elif torrent == 'M' or torrent == 'm':
